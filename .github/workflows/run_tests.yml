@@ -18,9 +18,8 @@ jobs:
 
       - name: 3. Установка зависимостей
         run:
-          python -m pip install --upgrade pip
-          pip install -r requirements.txt
-          playwright install --with-deps
+          python -m pip install --upgrade pip && pip install -r requirements.txt
+          playwright install
 
       - name: 4. Запуск тестов Pytest + Playwright
         run: pytest --alluredir=allure-results
