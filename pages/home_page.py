@@ -23,3 +23,6 @@ class HomePage(BasePage):
         return self.page.locator(".copyright > div:first-child").inner_text()
         # self.page.wait_for_load_state('load')
 
+    def searchfield(self):
+        return self.page.locator("")
+

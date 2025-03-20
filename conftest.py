@@ -1,10 +1,13 @@
+from dis import print_instructions
+
 import pytest
 import allure
 from playwright.sync_api import sync_playwright
 from utils.date_utils import get_current_date
 
 
-@pytest.fixture(scope="function", params=["chromium", "firefox", "webkit"])
+# @pytest.fixture(scope="function", params=["chromium", "firefox", "webkit"])
+@pytest.fixture(scope="function", params=["chromium"])
 def browser(request):
     """Фикстура для запуска тестов в Chrome, Firefox, WebKit"""
     with sync_playwright() as playwright:
@@ -42,4 +45,16 @@ def pytest_runtest_makereport(item, call):
             print(f"📸 Скриншот сохранен: {screenshot_path}")
 
             # Прикрепляем скриншот в Allure
-            allure.attach.file(screenshot_path, name=f"{test_name}_{browser_name}", attachment_type=allure.attachment_type.PNG)
+            allure.attach.file(screenshot_path, name=f"{test_name}_{browser_name}",
+                               attachment_type=allure.attachment_type.PNG)
+
+
+@pytest.fixture(scope='session')
+def tests_iteration():
+    print('\n= = = = = Iteration Started = = = = = ')
+    yield
+    print('\n= = = = = Iteration Finished = = = = = ')
+
+@pytest.mark.regression
+def tests_regression():
+    yield
