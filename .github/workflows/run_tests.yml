@@ -1,4 +1,4 @@
-name: Q-Room Tests Manually
+name: Q-Room tests Manually
 
 on:
   workflow_dispatch:
@@ -9,8 +9,8 @@ on:
         default: "false"
         type: choice
         options:
-          - "true"
-          - "false"
+          - "Pytest"
+          - "Pytest with Allure report"
 
 jobs:
   test:
@@ -44,7 +44,11 @@ jobs:
 
       - name: 5. Generate Allure Report (if enabled)
         if: inputs.allure == 'true'
-        run: allure generate allure-results -o allure-report --clean
+        run: | 
+          allure serve allure-results
+          allure generate allure-results -o allure-report --clean
+          ls -l allure-report
+
 
       - name: 6. Upload Allure Report (if enabled)
         if: inputs.allure == 'true'
