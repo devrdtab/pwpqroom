@@ -1,5 +1,3 @@
-from dis import print_instructions
-
 import pytest
 import allure
 from playwright.sync_api import sync_playwright

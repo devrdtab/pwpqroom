@@ -8,25 +8,25 @@ jobs:
     runs-on: ubuntu-latest  # Используем Linux-среду
 
     steps:
-      - name: 📥 Клонирование репозитория
+      - name: 1. Клонирование репозитория
         uses: actions/checkout@v3
 
-      - name: 🔧 Установка Python
+      - name: 2. Установка Python
         uses: actions/setup-python@v4
         with:
           python-version: "3.10"
 
-      - name: 🚀 Установка зависимостей
-        run: |
+      - name: 3. Установка зависимостей
+        run:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
           playwright install --with-deps
 
-      - name: ✅ Запуск тестов Pytest + Playwright
-        run: pytest #--alluredir=allure-results
+      - name: 4. Запуск тестов Pytest + Playwright
+        run: pytest --alluredir=allure-results
 
-#       - name: 📦 Сохранение Allure-отчета
-#         uses: actions/upload-artifact@v3
-#         with:
-#           name: allure-report
-#           path: allure-results
+      - name: 5. Сохранение Allure-отчета
+        uses: actions/upload-artifact@v3
+        with:
+          name: allure-report
+          path: allure-results
