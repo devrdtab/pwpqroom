@@ -1,17 +1,26 @@
-name: Q-Room tests Manually
+name: Q-Room Tests Manually
 
 on:
-  workflow_dispatch:  # Позволяет запускать вручную через GitHub Actions
+  workflow_dispatch:
+    inputs:
+      allure:
+        description: "Generate Allure Report?"
+        required: true
+        default: "false"
+        type: choice
+        options:
+          - "true"
+          - "false"
 
 jobs:
   test:
-    runs-on: ubuntu-latest  # Используем Linux-среду
+    runs-on: ubuntu-latest
 
     steps:
-      - name: 1. Clone Repositories
+      - name: 1. Clone Repository
         uses: actions/checkout@v3
 
-      - name: 2. Install Python
+      - name: 2. Set up Python
         uses: actions/setup-python@v4
         with:
           python-version: "3.11"
@@ -21,15 +30,25 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
           playwright install --with-deps
+          if [ "${{ inputs.allure }}" == "true" ]; then
+            npm install -g allure-commandline
+          fi
 
-      - name: 4. Ensure Allure Results Directory Exists
-        run: mkdir -p allure-results
+      - name: 4. Run Pytest Tests
+        run: |
+          if [ "${{ inputs.allure }}" == "true" ]; then
+            pytest tests/ --alluredir=allure-results
+          else
+            pytest tests/
+          fi
 
-      - name: 5. Run Pytest + Playwright Tests
-        run: pytest tests/ --alluredir=allure-results
+      - name: 5. Generate Allure Report (if enabled)
+        if: inputs.allure == 'true'
+        run: allure generate allure-results -o allure-report --clean
 
-      - name: 6. Upload Allure Report
+      - name: 6. Upload Allure Report (if enabled)
+        if: inputs.allure == 'true'
         uses: actions/upload-artifact@v4
         with:
           name: allure-report
-          path: allure-results
+          path: allure-report
