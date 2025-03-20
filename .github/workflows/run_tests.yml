@@ -4,13 +4,13 @@ on:
   workflow_dispatch:
     inputs:
       allure:
-        description: "Generate Allure Report?"
+        description: "How to run test?"
         required: true
         default: "false"
         type: choice
         options:
-          - "Pytest"
-          - "Pytest with Allure report"
+          - "Pytest only"
+          - "Pytest with Allure report (allure-report.zip)"
 
 jobs:
   test:
