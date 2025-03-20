@@ -7,7 +7,7 @@ from utils.date_utils import get_current_year
 
 from playwright.sync_api import expect
 
-@pytest.mark.skip('Default title test')
+# @pytest.mark.skip('Default title test')
 def test_home_page_title_test(page, tests_iteration):
     """Проверка заголовка главной страницы"""
     home_page = HomePage(page)
@@ -15,14 +15,14 @@ def test_home_page_title_test(page, tests_iteration):
     assert home_page.get_title() == "Квест комнаты Киев, независимый рейтинг квестов - реальные отзывы, обзоры на портале | Q-ROOM", "ЗАГОЛОВОК title НЕ СОВПАДАЕТ"
 
 
-def test_switch_language_test(page, tests_iteration):
+# def test_switch_language_test(page, tests_iteration):
     """Проверка переключения языка"""
     home_page = HomePage(page)
     home_page.open()
     home_page.switch_language()
     assert home_page.get_current_url() == f"{BASE_URL}/ua", "Язык не переключился"
 
-@pytest.mark.regression
+# @pytest.mark.regression
 def test_change_city_test(page):
     """Проверка переключения города"""
     home_page = HomePage(page)

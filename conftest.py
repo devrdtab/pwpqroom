@@ -4,8 +4,8 @@ from playwright.sync_api import sync_playwright
 from utils.date_utils import get_current_date
 
 
-# @pytest.fixture(scope="function", params=["chromium", "firefox", "webkit"])
-@pytest.fixture(scope="function", params=["chromium"])
+@pytest.fixture(scope="function", params=["chromium", "firefox", "webkit"])
+# @pytest.fixture(scope="function", params=["chromium"])
 def browser(request):
     """Фикстура для запуска тестов в Chrome, Firefox, WebKit"""
     with sync_playwright() as playwright:
