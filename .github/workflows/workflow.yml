@@ -1,4 +1,4 @@
-name: Q-Room tests Manually
+name: Q-Room Tests Manually
 
 on:
   workflow_dispatch:
@@ -6,11 +6,14 @@ on:
       allure:
         description: "How to run test?"
         required: true
-        default: "false"
+        default: "Pytest only"
         type: choice
         options:
           - "Pytest only"
-          - "Pytest with Allure report (allure-report.zip)"
+          - "Pytest with Allure report"
+
+permissions:
+  contents: write  # Нужно для публикации на GitHub Pages
 
 jobs:
   test:
@@ -30,27 +33,35 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
           playwright install --with-deps
-          if [ "${{ inputs.allure }}" == "Pytest with Allure report (allure-report.zip)" ]; then
+          if [ "${{ inputs.allure }}" == "Pytest with Allure report" ]; then
             npm install -g allure-commandline
           fi
 
       - name: 4. Run Pytest Tests
         run: |
-          if [ "${{ inputs.allure }}" == "Pytest with Allure report (allure-report.zip)" ]; then
+          if [ "${{ inputs.allure }}" == "Pytest with Allure report" ]; then
             pytest tests/ --alluredir=allure-results
           else
             pytest tests/
           fi
 
       - name: 5. Generate Allure Report (if enabled)
-        if: inputs.allure == 'Pytest with Allure report (allure-report.zip)'
+        if: inputs.allure == 'Pytest with Allure report'
         run: |
           allure generate allure-results -o allure-report --clean
           ls -l allure-report
 
-      - name: 6. Upload Allure Report (if enabled)
-        if: inputs.allure == 'Pytest with Allure report (allure-report.zip)'
+      - name: 6. Upload Allure Report as Artifact
+        if: inputs.allure == 'Pytest with Allure report'
         uses: actions/upload-artifact@v4
         with:
           name: allure-report
           path: allure-report
+
+      - name: 7. Deploy Allure Report to GitHub Pages
+        if: inputs.allure == 'Pytest with Allure report'
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          branch: gh-pages
+          folder: allure-report
+          clean: true

@@ -11,7 +11,7 @@ def test_home_page_title_test(page, tests_iteration):
     assert home_page.get_title() == "Квест комнаты Киев, независимый рейтинг квестов - реальные отзывы, обзоры на портале | Q-ROOM", "ЗАГОЛОВОК title НЕ СОВПАДАЕТ"
 
 
-# def test_switch_language_test(page, tests_iteration):
+def test_switch_language_test(page):
     """Проверка переключения языка"""
     home_page = HomePage(page)
     home_page.open()
