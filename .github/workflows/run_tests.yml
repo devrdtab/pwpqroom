@@ -30,26 +30,28 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
           playwright install --with-deps
-          if [ "${{ inputs.allure }}" == "true" ]; then
+          if [ "${{ inputs.allure }}" == "Pytest with Allure report (allure-report.zip)" ]; then
             npm install -g allure-commandline
           fi
 
       - name: 4. Run Pytest Tests
         run: |
-          if [ "${{ inputs.allure }}" == "true" ]; then
+          if [ "${{ inputs.allure }}" == "Pytest with Allure report (allure-report.zip)" ]; then
             pytest tests/ --alluredir=allure-results
           else
             pytest tests/
           fi
 
       - name: 5. Generate Allure Report (if enabled)
-        if: inputs.allure == 'true'
-        run:
+        if: inputs.allure == 'Pytest with Allure report (allure-report.zip)'
+        run: | 
+          allure serve allure-results
           allure generate allure-results -o allure-report --clean
+          ls -l allure-report
 
 
       - name: 6. Upload Allure Report (if enabled)
-        if: inputs.allure == 'true'
+        if: inputs.allure == 'Pytest with Allure report (allure-report.zip)'
         uses: actions/upload-artifact@v4
         with:
           name: allure-report
