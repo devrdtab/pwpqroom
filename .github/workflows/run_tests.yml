@@ -45,10 +45,9 @@ jobs:
       - name: 5. Generate Allure Report (if enabled)
         if: inputs.allure == 'Pytest with Allure report (allure-report.zip)'
         run: | 
-          allure serve allure-results
+#          allure serve allure-results
           allure generate allure-results -o allure-report --clean
           ls -l allure-report
-
 
       - name: 6. Upload Allure Report (if enabled)
         if: inputs.allure == 'Pytest with Allure report (allure-report.zip)'

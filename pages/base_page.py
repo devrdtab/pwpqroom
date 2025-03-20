@@ -1,5 +1,5 @@
 from playwright.sync_api import Page
-from constants import BASE_URL
+from utils.constants import BASE_URL
 
 class BasePage:
     def __init__(self, page: Page, path: str = ""):

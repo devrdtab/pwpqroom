@@ -1,11 +1,7 @@
-import pytest
-from pytest_playwright.pytest_playwright import pytest_generate_tests
-
 from pages.home_page import HomePage
-from constants import BASE_URL
+from utils.constants import BASE_URL
 from utils.date_utils import get_current_year
 
-from playwright.sync_api import expect
 
 # @pytest.mark.skip('Default title test')
 def test_home_page_title_test(page, tests_iteration):
@@ -31,7 +27,7 @@ def test_change_city_test(page):
     assert home_page.get_current_url() == 'https://lvov.q-room.com/', "Город не переключился"
 
 def test_copyright_test(page, request):
-    test_name = request.node.name
+    # test_name = request.node.name
     home_page = HomePage(page)
     home_page.open()
     datecopyright = home_page.check_copyright()
