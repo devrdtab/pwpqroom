@@ -53,3 +53,9 @@ class HomePage(BasePage):
 
         return div_count, has_venom
 
+    def click_read_more(self):
+        self.page.locator(".readmore__link").click()
+
+    def is_element_active(self) -> bool:
+        element = self.page.locator(".readmore__hide")
+        return "active" in element.get_attribute("class")

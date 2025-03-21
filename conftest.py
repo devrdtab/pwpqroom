@@ -49,8 +49,8 @@ def pytest_runtest_makereport(item, call):
             screenshot_path = os.path.join(SCREENSHOT_DIR, f"{test_name}_{browser_name}_{timestamp}.png")
 
             # Отладка
-            print(f"🔍 Текущий каталог: {os.getcwd()}")
-            print(f"📸 Путь сохранения: {screenshot_path}")
+            # print(f"🔍 Текущий каталог: {os.getcwd()}")
+            # print(f"📸 Путь сохранения: {screenshot_path}")
 
             # Делаем скриншот и сохраняем
             try:
