@@ -51,14 +51,6 @@ def test_search_field(page):
     print(f"✅ Найдено {result_count} результатов. Первый результат содержит 'VENOM': {has_venom}")
 
 
-def test_seo_readmore(page):
-    """Проверка переключения языка"""
-    home_page = HomePage(page)
-    home_page.open()
-    home_page.show_seo_text()
-    assert "active" in page.locator(".readmore__hide").get_attribute("active"), "Элемент не имеет класс .active"
-
-
 def test_read_more_active(page):
     home_page = HomePage(page)
     home_page.open()

@@ -59,3 +59,6 @@ class HomePage(BasePage):
     def is_element_active(self) -> bool:
         element = self.page.locator(".readmore__hide")
         return "active" in element.get_attribute("class")
+
+    def goto_category(self):
+        self.page.locator(".switcher-inner").click()
