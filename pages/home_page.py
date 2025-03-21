@@ -25,7 +25,8 @@ class HomePage(BasePage):
 
     def search_field(self):
         """Ищет 'ужасы' и выбирает категорию"""
-        search_input = self.page.locator("body > main > div.home-search > div > div > div > div > div:nth-child(2) > div > div > form > input[type=text]")
+        search_input = self.page.locator(
+            "body > main > div.home-search > div > div > div > div > div:nth-child(2) > div > div > form > input[type=text]")
         search_input.fill("ужасы")
 
         # Ожидание появления результатов поиска
@@ -61,4 +62,17 @@ class HomePage(BasePage):
         return "active" in element.get_attribute("class")
 
     def goto_category(self):
-        self.page.locator(".switcher-inner").click()
+        self.page.locator(".home-search .top-search-gender .quest-category a").nth(3).click()
+        # self.page.wait_for_selector(".home-search .top-search-gender .quest-category a", state="visible", timeout=10000)
+        # self.page.locator(".home-search .top-search-gender .quest-category a:nth-of-type(3)").click()
+
+    def category_title(self):
+        return self.page.locator(".home-search .top-search-gender .search-title").inner_text()
+
+    def go_to_quest(self):
+        self.page.locator("#filtertab-1 .row .quest-item-wrapper").nth(3).click()
+
+    def quest_title(self):
+        return self.page.locator(".top-quest-info__name").inner_text().strip()
+        # self.page.wait_for_selector(".top-quest-info__name", state="visible", timeout=10000)
+        # return self.page.locator(".top-quest-info__name").text_content().strip()

@@ -13,8 +13,8 @@ SCREENSHOT_DIR = os.path.join(PROJECT_DIR, "artifacts", "screenshots")
 os.makedirs(SCREENSHOT_DIR, exist_ok=True)
 
 # Отладка
-print(f"📂 Корневая папка проекта: {PROJECT_DIR}")
-print(f"📸 Скриншоты будут сохраняться в: {SCREENSHOT_DIR}")
+# print(f"📂 Корневая папка проекта: {PROJECT_DIR}")
+# print(f"📸 Скриншоты будут сохраняться в: {SCREENSHOT_DIR}")
 
 # @pytest.fixture(scope="function", params=["chromium", "firefox", "webkit"])
 @pytest.fixture(scope="function", params=["chromium"])
