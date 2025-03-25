@@ -137,12 +137,16 @@ jobs:
           allure generate allure-results -o _site --clean
           ls -la _site
 
-      - name: Store Generated Report
+      - name: Store Allure History
         uses: actions/upload-artifact@v4
         with:
-          name: _site-${{ github.run_id }}
-          path: _site
+          name: allure-results-${{ github.run_id }}
+          path: allure-results
           retention-days: 1
+          if-no-files-found: warn
+          compression-level: 6
+          overwrite: false
+          include-hidden-files: false
 
   publish-report:
     runs-on: ubuntu-latest
