@@ -61,7 +61,7 @@ jobs:
       - name: Store Allure History
         uses: actions/upload-artifact@v4
         with:
-          name: allure-results
+          name: allure-results-${{ github.run_id }}
           path: allure-results
           retention-days: 1
 
@@ -89,7 +89,7 @@ jobs:
       - name: Download Allure Results
         uses: actions/download-artifact@v4
         with:
-          name: allure-results
+          name: allure-results-${{ github.run_id }}
           path: allure-results
 
       - name: Run Tests
@@ -100,7 +100,7 @@ jobs:
       - name: Store Test Results
         uses: actions/upload-artifact@v4
         with:
-          name: allure-results
+          name: allure-results-${{ github.run_id }}
           path: allure-results
           retention-days: 1
 
@@ -124,7 +124,7 @@ jobs:
       - name: Download Allure Results
         uses: actions/download-artifact@v4
         with:
-          name: allure-results
+          name: allure-results-${{ github.run_id }}
           path: allure-results
 
       - name: Generate Allure Report
@@ -136,7 +136,7 @@ jobs:
       - name: Store Generated Report
         uses: actions/upload-artifact@v4
         with:
-          name: _site
+          name: _site-${{ github.run_id }}
           path: _site
           retention-days: 1
 
@@ -148,7 +148,7 @@ jobs:
       - name: Download Generated Report
         uses: actions/download-artifact@v4
         with:
-          name: _site
+          name: _site-${{ github.run_id }}
           path: _site
 
       - name: Upload Pages Artifact
