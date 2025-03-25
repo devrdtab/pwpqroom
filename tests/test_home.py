@@ -1,3 +1,4 @@
+import allure
 import pytest
 
 from pages.home_page import HomePage
@@ -8,11 +9,15 @@ def test_start(page, tests_iteration):
     pass
 
 # @pytest.mark.skip('Default title test')
+@allure.feature('общий функционал')
+@allure.story('story общий функционал')
 def test_home_page_title(page):
     """Проверка заголовка главной страницы"""
-    home_page = HomePage(page)
-    home_page.open()
-    assert home_page.get_title() == "Квест комнаты Киев, независимый рейтинг квестов - реальные отзывы, обзоры на портале | Q-ROOM", "ЗАГОЛОВОК title НЕ СОВПАДАЕТ"
+    with allure.step('открываем страницу и смотрим на title'):
+        home_page = HomePage(page)
+        home_page.open()
+    with allure.step('Сверяем title'):
+        assert home_page.get_title() == "Квест комнаты Киев, независимый рейтинг квестов - реальные отзывы, обзоры на портале | Q-ROOM", "ЗАГОЛОВОК title НЕ СОВПАДАЕТ"
 
 def test_switch_language(page):
     """Проверка переключения языка"""
@@ -31,6 +36,7 @@ def test_change_city(page):
 
 
 def test_copyright(page, request):
+    """Проверка даты копирайтинга"""
     # test_name = request.node.name
     home_page = HomePage(page)
     home_page.open()
@@ -39,6 +45,7 @@ def test_copyright(page, request):
 
 
 def test_search_field(page):
+    """Проверка поля поиска квестов"""
     home_page = HomePage(page)
     # Открыть главную страницу
     home_page.open()
@@ -54,6 +61,7 @@ def test_search_field(page):
 
 
 def test_read_more_active(page):
+    """Проверка раскрытия seo текста"""
     home_page = HomePage(page)
     home_page.open()
     home_page.click_read_more()
@@ -61,6 +69,7 @@ def test_read_more_active(page):
 
 
 def test_change_category(page):
+    """Проверка перехода на страницу категории"""
     home_page = HomePage(page)
     home_page.open()
     home_page.goto_category()
@@ -69,8 +78,19 @@ def test_change_category(page):
 
 
 def test_go_to_quest(page):
+    """Проверка перехода на страницу квеста"""
     home_page = HomePage(page)
     home_page.open()
     home_page.go_to_quest()
     assert home_page.get_current_url() == f"{BASE_URL}/quests/mayn", "url квеста не акутальный"
     assert home_page.quest_title() == "Квест «Майн», Киев", "Заголовок квеста не соответствует"
+
+
+def test_open_filter(page):
+    """Проверка открытия фильтра"""
+    pass
+
+def test_filter_params(page):
+    """Проверка выбора параметров фильтра"""
+    pass
+

@@ -1,4 +1,5 @@
 from pages.base_page import BasePage
+import allure
 
 
 class HomePage(BasePage):
@@ -6,8 +7,9 @@ class HomePage(BasePage):
         super().__init__(page, "/")  # Главная страница
 
     def switch_language(self):
-        """Нажимает на переключатель языка"""
-        self.page.locator(".switcher-inner").click()
+        with allure.step('нажимаем на переключатель языков'):
+            """Нажимает на переключатель языка"""
+            self.page.locator(".switcher-inner").click()
 
     def get_current_url(self):
         """Возвращает текущий URL"""
@@ -76,3 +78,6 @@ class HomePage(BasePage):
         return self.page.locator(".top-quest-info__name").inner_text().strip()
         # self.page.wait_for_selector(".top-quest-info__name", state="visible", timeout=10000)
         # return self.page.locator(".top-quest-info__name").text_content().strip()
+
+    def filter_open(self):
+        self.page.locator('#wrap_toggle').click()
