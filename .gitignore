@@ -3,4 +3,7 @@
 __pycache__
 .venv/
 venv/
-helpers/
+_helpers/
+allure-results/
+allure-report/
+artifacts/
