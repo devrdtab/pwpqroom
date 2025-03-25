@@ -124,15 +124,13 @@ jobs:
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          name: github-pages  # Убедитесь, что имя артефакта соответствует вашему
+          name: github-pages  # Имя артефакта
           path: _site/        # Путь, где находится артефакт (например, в _site/)
 
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}  # Используем автоматический токен для авторизации
-          artifact_name: github-pages         # Имя артефакта, которое будет использоваться для деплоя
-          preview: false                      # Убедитесь, что хотите сделать полноценный деплой, а не предпросмотр
-        environment:
-          name: github-pages  # Добавляем среду для деплоя
+          token: ${{ secrets.TOKEN }}  # Используем автоматический токен для авторизации
+          artifact_name: github-pages         # Имя артефакта для деплоя
+          preview: false                      # Отключаем предпросмотр
