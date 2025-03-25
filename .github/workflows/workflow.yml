@@ -114,6 +114,7 @@ jobs:
           path:
             _site
           retention-days: 5
+          overwrite: true
 
   publish-report:
     runs-on: ubuntu-latest
