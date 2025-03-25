@@ -6,11 +6,11 @@ on:
       deployment_target:
         description: "How to run test?"
         required: true
-        default: "Pytest only"
+        default: "Pytest with Allure report"
         type: choice
         options:
-          - "Pytest only"
           - "Pytest with Allure report"
+          - "Pytest only"
 
 permissions:
   contents: read
