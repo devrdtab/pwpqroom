@@ -63,8 +63,8 @@ jobs:
         if: inputs.allure == 'Pytest with Allure report'
         uses: actions/download-artifact@v4
         with:
-          name: allure-report-history
-          path: allure-report-history
+          name: allure-report
+          path: allure-report
 
       - name: 8. Store Allure Report History
         if: inputs.allure == 'Pytest with Allure report'
