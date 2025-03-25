@@ -86,11 +86,11 @@ def test_go_to_quest(page):
     assert home_page.quest_title() == "Квест «Майн», Киев", "Заголовок квеста не соответствует"
 
 
-def test_open_filter(page):
-    """Проверка открытия фильтра"""
-    pass
-
-def test_filter_params(page):
-    """Проверка выбора параметров фильтра"""
-    pass
+# def test_open_filter(page):
+#     """Проверка открытия фильтра"""
+#     pass
+#
+# def test_filter_params(page):
+#     """Проверка выбора параметров фильтра"""
+#     pass
 
