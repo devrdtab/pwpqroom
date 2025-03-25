@@ -82,7 +82,7 @@ def test_go_to_quest(page):
     home_page = HomePage(page)
     home_page.open()
     home_page.go_to_quest()
-    assert home_page.get_current_url() == f"{BASE_URL}/quests/mayn", "url квеста не акутальный"
+    assert home_page.get_current_url() == f"{BASE_URL}/quests/mayn", "url квеста не актуальный"
     assert home_page.quest_title() == "Квест «Майн», Киев", "Заголовок квеста не соответствует"
 
 
