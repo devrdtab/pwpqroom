@@ -103,6 +103,10 @@ jobs:
           name: allure-results-${{ github.run_id }}
           path: allure-results
           retention-days: 1
+          if-no-files-found: warn
+          compression-level: 6
+          overwrite: false
+          include-hidden-files: false
 
   generate-report:
     runs-on: ubuntu-latest
