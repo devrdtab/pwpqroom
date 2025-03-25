@@ -34,7 +34,7 @@ jobs:
           
           echo "API Response: $RESPONSE"
 
-          ARTIFACT_ID=$(echo "$RESPONSE" | python3 -c "import sys, json; data=json.load(sys.stdin); print(data['artifacts'][0]['id']) if data['artifacts'] else exit(1)")
+          ARTIFACT_ID=$(echo "$RESPONSE" | python3 -c "import sys, json; data=json.load(sys.stdin); print(data['artifacts'][0]['id']) if data.get('artifacts') else exit(1)")
 
           if [ -z "$ARTIFACT_ID" ]; then
             echo "No Allure results artifact found."
@@ -48,6 +48,7 @@ jobs:
 
       - name: Extract Allure Results
         run: |
+          rm -rf allure-results
           mkdir allure-results && unzip artifacts.zip -d allure-results
           ls -la allure-results
 
@@ -64,7 +65,7 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Setup Python
         uses: actions/setup-python@v4
@@ -79,11 +80,17 @@ jobs:
 
       - name: Download Allure Results
         uses: actions/download-artifact@v4
+        with:
+          name: allure-results
+          path: allure-results
 
       - name: Run Tests
         if: github.event.inputs.deployment_target == 'Run All Tests'
         run: pytest --alluredir=allure-results
         continue-on-error: true
+
+      - name: Store Test Results
+        run: rm -rf allure-results || true
 
       - name: Store Test Results
         uses: actions/upload-artifact@v4
@@ -111,6 +118,9 @@ jobs:
 
       - name: Download Allure Results
         uses: actions/download-artifact@v4
+        with:
+          name: allure-results
+          path: allure-results
 
       - name: Generate Allure Report
         run: |
@@ -131,6 +141,9 @@ jobs:
     steps:
       - name: Download Generated Report
         uses: actions/download-artifact@v4
+        with:
+          name: _site
+          path: _site
 
       - name: Upload Pages Artifact
         uses: actions/upload-pages-artifact@v2
