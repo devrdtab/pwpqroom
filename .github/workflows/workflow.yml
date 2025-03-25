@@ -61,7 +61,7 @@ jobs:
       - name: Store Allure History
         uses: actions/upload-artifact@v4
         with:
-          name: allure-results-${{ github.run_id }}
+          name: allure-results-${{ github.run_id }}-${{ github.event.created_at }}
           path: allure-results
           retention-days: 1
 
@@ -89,7 +89,7 @@ jobs:
       - name: Download Allure Results
         uses: actions/download-artifact@v4
         with:
-          name: allure-results-${{ github.run_id }}
+          name: allure-results-${{ github.run_id }}-${{ github.event.created_at }}
           path: allure-results
 
       - name: Run Tests
@@ -100,7 +100,7 @@ jobs:
       - name: Store Test Results
         uses: actions/upload-artifact@v4
         with:
-          name: allure-results-${{ github.run_id }}
+          name: allure-results-${{ github.run_id }}-${{ github.event.created_at }}
           path: allure-results
           retention-days: 1
           if-no-files-found: warn
@@ -128,7 +128,7 @@ jobs:
       - name: Download Allure Results
         uses: actions/download-artifact@v4
         with:
-          name: allure-results-${{ github.run_id }}
+          name: allure-results-${{ github.run_id }}-${{ github.event.created_at }}
           path: allure-results
 
       - name: Generate Allure Report
@@ -140,7 +140,7 @@ jobs:
       - name: Store Allure History
         uses: actions/upload-artifact@v4
         with:
-          name: allure-results-${{ github.run_id }}
+          name: allure-results-${{ github.run_id }}-${{ github.event.created_at }}
           path: allure-results
           retention-days: 1
           if-no-files-found: warn
@@ -156,7 +156,7 @@ jobs:
       - name: Download Generated Report
         uses: actions/download-artifact@v4
         with:
-          name: _site-${{ github.run_id }}
+          name: _site-${{ github.run_id }}-${{ github.event.created_at }}
           path: _site
 
       - name: Upload Pages Artifact
