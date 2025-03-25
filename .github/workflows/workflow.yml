@@ -69,7 +69,7 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: setup Python
         uses: actions/setup-python@v4
         with:
@@ -79,7 +79,7 @@ jobs:
       - name: install dependencies
         run: pip install -r requirements.txt
       - name: Download all workflow run artifacts
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
       - name: all
         if: "github.event.inputs.deployment_target == 'all'"
         run: pytest --alluredir=allure-results
