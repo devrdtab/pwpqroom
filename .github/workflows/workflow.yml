@@ -1,67 +1,136 @@
-name: Q-Room Tests Manually
+name: Automated tests
 
 on:
   workflow_dispatch:
     inputs:
-      allure:
-        description: "How to run test?"
+      deployment_target:
+        description: Choose target
         required: true
-        default: "Pytest only"
+        default: second_test
         type: choice
         options:
-          - "Pytest only"
-          - "Pytest with Allure report"
+          - first_test
+          - second_test
+          - all
 
 permissions:
-  contents: write  # Нужно для публикации на GitHub Pages
+  contents: read
+  pages: write
+  id-token: write
 
 jobs:
-  test:
+  download-history:
+    # if: false
     runs-on: ubuntu-latest
-
+    name: Download history
     steps:
-      - name: 1. Clone Repository
-        uses: actions/checkout@v3
-
-      - name: 2. Set up Python
+      - name: setup Python
         uses: actions/setup-python@v4
         with:
-          python-version: "3.11"
+          python-version: "3.13"
+      - run: >
+          ARTIFACT_ID=$(curl -L 
+          -H "Accept: application/vnd.github+json" 
+          -H "X-GitHub-Api-Version: 2022-11-28" 
+          "https://api.github.com/repos/devrdtab/pwpqroom/actions/artifacts?name=allure-results" 
+          | python -c "import sys, json; print(json.load(sys.stdin)['artifacts'][0]['id']);") 
+          &&
+          curl -L 
+          -H "Accept: application/vnd.github+json" 
+          -H "Authorization: Bearer ${{ secrets.TOKEN }}" 
+          -H "X-GitHub-Api-Version: 2022-11-28" 
+          https://api.github.com/repos/devrdtab/pwpqroom/actions/artifacts/$ARTIFACT_ID/zip 
+          -o artifacts.zip &&
+          REPORT_ID=$(curl -L 
+          -H "Accept: application/vnd.github+json" 
+          -H "X-GitHub-Api-Version: 2022-11-28" 
+          "https://api.github.com/repos/devrdtab/pwpqroom/actions/artifacts?name=github-pages" 
+          | python -c "import sys, json; print(json.load(sys.stdin)['artifacts'][0]['id']);") 
+          &&
+          curl -L 
+          -H "Accept: application/vnd.github+json" 
+          -H "Authorization: Bearer ${{ secrets.TOKEN }}" 
+          -H "X-GitHub-Api-Version: 2022-11-28" 
+          https://api.github.com/repos/devrdtab/pwpqroom/actions/artifacts/$REPORT_ID/zip 
+          -o pages.zip
+      - run: mkdir allure-results && unzip artifacts.zip -d allure-results
+      - run: mkdir old_pages pages_history && unzip pages.zip -d old_pages && tar -xvf old_pages/artifact.tar -C pages_history
+      - run: cp pages_history/history/* allure-results && cp -r pages_history/history allure-results
+      - name: Store allure history
+        uses: actions/upload-artifact@v3
+        with:
+          name: allure-results
+          path:
+            allure-results
+          retention-days: 1
 
-      - name: 3. Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install -r requirements.txt
-          playwright install --with-deps
-          if [ "${{ inputs.allure }}" == "Pytest with Allure report" ]; then
-            npm install -g allure-commandline
-          fi
+  test:
+    runs-on: ubuntu-latest
+    needs: download-history
 
-      - name: 4. Run Pytest Tests
-        run: |
-          if [ "${{ inputs.allure }}" == "Pytest with Allure report" ]; then
-            pytest tests/ --alluredir=allure-results
-          else
-            pytest tests/
-          fi
-
-      - name: 5. Generate Allure Report (if enabled)
-        if: inputs.allure == 'Pytest with Allure report'
-        run: |
-          allure generate allure-results -o allure-report --clean
-          ls -l allure-report
-
-      - name: 6. Upload Allure Report as Artifact
-        if: inputs.allure == 'Pytest with Allure report'
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+      - name: setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.13"
+      - name: Install Chrome
+        run: sudo apt-get install google-chrome-stable
+      - name: install dependencies
+        run: pip install -r requirements.txt
+      - name: Download all workflow run artifacts
+        uses: actions/download-artifact@v4
+      - name: first_test
+        if: "github.event.inputs.deployment_target == 'first_test'"
+        run: pytest tests/test_button.py::test_button_exist --alluredir=allure-results
+        continue-on-error: true
+      - name: second_test
+        if: "github.event.inputs.deployment_target == 'second_test'"
+        run: pytest tests/test_button.py::test_button_exist_2 --alluredir=allure-results
+        continue-on-error: true
+      - name: all
+        if: "github.event.inputs.deployment_target == 'all'"
+        run: pytest --alluredir=allure-results
+        continue-on-error: true
+      - name: Store allure results
         uses: actions/upload-artifact@v4
         with:
-          name: allure-report
-          path: allure-report
+          name: allure-results
+          path:
+            allure-results
+          retention-days: 1
 
-      - name: 7. Deploy Allure Report to GitHub Pages
-        if: inputs.allure == 'Pytest with Allure report'
-        uses: JamesIves/github-pages-deploy-action@v4
+  generate-report:
+    runs-on: ubuntu-latest
+    needs: test
+    name: Generate report
+    steps:
+      - uses: actions/setup-java@v3
         with:
-          branch: gh-pages
-          folder: allure-report
-          clean: true
+          distribution: 'microsoft' # See 'Supported distributions' for available options
+          java-version: '17'
+      - run: sudo wget https://github.com/allure-framework/allure2/releases/download/2.23.1/allure-2.23.1.tgz && sudo tar -zxvf allure-2.23.1.tgz -C /opt/ && sudo ln -s /opt/allure-2.23.1/bin/allure /usr/bin/allure
+      - name: Download all workflow run artifacts
+        uses: actions/download-artifact@v4
+      - run: allure generate -c allure-results -o _site
+      - name: Store generated report
+        uses: actions/upload-artifact@v4
+        with:
+          name: _site
+          path:
+            _site
+          retention-days: 1
+
+  publish-report:
+    runs-on: ubuntu-latest
+    needs: generate-report
+    name: Report publication
+    steps:
+      - name: Download all workflow run artifacts
+        uses: actions/download-artifact@v4
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v2
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
