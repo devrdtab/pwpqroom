@@ -28,20 +28,25 @@ jobs:
 
       - name: Fetch Allure Results Artifact
         run: |
-          RESPONSE=$(curl -L -H "Accept: application/vnd.github+json" \
+          echo "Fetching Allure Results Artifact..."
+
+          RESPONSE=$(curl -s -L -H "Accept: application/vnd.github+json" \
             -H "X-GitHub-Api-Version: 2022-11-28" \
             "https://api.github.com/repos/devrdtab/pwpqroom/actions/artifacts")
-          
+
           echo "API Response: $RESPONSE"
 
-          ARTIFACT_ID=$(echo "$RESPONSE" | python3 -c "import sys, json; data=json.load(sys.stdin); print(data['artifacts'][0]['id']) if data.get('artifacts') else exit(1)")
+          ARTIFACT_ID=$(echo "$RESPONSE" | python3 -c "import sys, json; data=json.load(sys.stdin); print(data['artifacts'][0]['id']) if 'artifacts' in data and data['artifacts'] else ''")
 
-          if [ -z "$ARTIFACT_ID" ]; then
-            echo "No Allure results artifact found."
-            exit 1
+          if [[ -z "$ARTIFACT_ID" ]]; then
+            echo "No Allure results artifact found. Skipping download."
+            exit 0
           fi
 
-          curl -L -H "Accept: application/vnd.github+json" \
+          echo "Downloading artifact ID: $ARTIFACT_ID"
+
+          rm -f artifacts.zip
+          curl -s -L -H "Accept: application/vnd.github+json" \
             -H "Authorization: Bearer ${{ secrets.TOKEN }}" \
             -H "X-GitHub-Api-Version: 2022-11-28" \
             "https://api.github.com/repos/devrdtab/pwpqroom/actions/artifacts/$ARTIFACT_ID/zip" -o artifacts.zip
@@ -49,7 +54,8 @@ jobs:
       - name: Extract Allure Results
         run: |
           rm -rf allure-results
-          mkdir allure-results && unzip artifacts.zip -d allure-results
+          mkdir -p allure-results
+          unzip -q artifacts.zip -d allure-results || echo "No artifacts to extract"
           ls -la allure-results
 
       - name: Store Allure History
@@ -66,6 +72,8 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Setup Python
         uses: actions/setup-python@v4
@@ -90,9 +98,6 @@ jobs:
         continue-on-error: true
 
       - name: Store Test Results
-        run: rm -rf allure-results || true
-
-      - name: Store Test Results
         uses: actions/upload-artifact@v4
         with:
           name: allure-results
@@ -112,9 +117,9 @@ jobs:
 
       - name: Install Allure
         run: |
-          sudo wget https://github.com/allure-framework/allure2/releases/download/2.23.1/allure-2.23.1.tgz
-          sudo tar -zxvf allure-2.23.1.tgz -C /opt/
-          sudo ln -s /opt/allure-2.23.1/bin/allure /usr/bin/allure
+          wget -q https://github.com/allure-framework/allure2/releases/download/2.23.1/allure-2.23.1.tgz
+          tar -zxf allure-2.23.1.tgz -C /opt/
+          ln -sf /opt/allure-2.23.1/bin/allure /usr/bin/allure
 
       - name: Download Allure Results
         uses: actions/download-artifact@v4
@@ -124,6 +129,7 @@ jobs:
 
       - name: Generate Allure Report
         run: |
+          mkdir -p _site
           allure generate allure-results -o _site --clean
           ls -la _site
 
