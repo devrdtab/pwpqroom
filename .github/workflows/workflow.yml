@@ -63,14 +63,18 @@ jobs:
         if: inputs.allure == 'Pytest with Allure report'
         uses: actions/download-artifact@v4
         with:
-          name: allure-results
-          path: allure-results
+          name: allure-report-history
+          path: allure-results/history
+          if-no-files-found: ignore  # Игнорировать ошибку, если артефакт не найден
 
       - name: 8. Store Allure Report History
         if: inputs.allure == 'Pytest with Allure report'
         run: |
           mkdir -p allure-results/history
-          cp -r allure-report/history/* allure-results/history/
+          # Копируем историю, если она доступна
+          if [ -d allure-results/history ]; then
+            cp -r allure-results/history/* allure-results/history/
+          fi
 
       - name: 9. Deploy Allure Report to GitHub Pages with Trends
         if: inputs.allure == 'Pytest with Allure report'
