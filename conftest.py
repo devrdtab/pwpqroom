@@ -25,7 +25,7 @@ def browser(request):
         yield browser
         browser.close()
 
-@pytest.fixture(scope="function")
+@pytest.fixture(scope="function", autouse=True)
 def page(browser):
     """Фикстура для создания страницы"""
     context = browser.new_context()
