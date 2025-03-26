@@ -24,7 +24,7 @@ jobs:
         pip install -r requirements.txt
         playwright install --with-deps
 
-    # Скачивание предыдущей истории из gh-pages
+    # Скачивание истории из gh-pages
     - name: Download previous Allure history
       uses: actions/checkout@v4
       with:
@@ -32,20 +32,17 @@ jobs:
         path: gh-pages
       continue-on-error: true
 
-    # Подготовка истории для генерации отчета
-    - name: Prepare history directory
+    # Подготовка результатов с историей
+    - name: Prepare results with history
       run: |
-        mkdir -p allure-report/history
+        mkdir -p allure-results/history
         if [ -d "gh-pages/history" ]; then
-          cp -r gh-pages/history/* allure-report/history/
-          echo "History copied from gh-pages"
+          cp -r gh-pages/history/* allure-results/history/
+          echo "History copied from gh-pages to allure-results/history"
         else
-          echo "No previous history found in gh-pages"
+          echo "No previous history found"
         fi
-    # Отладка: проверка содержимого истории после копирования
-    - name: Debug history after copy
-      run: |
-        ls -la allure-report/history || echo "History directory is empty after copy"
+        ls -la allure-results/history || echo "allure-results/history is empty"
 
     # Запуск тестов
     - name: Run Playwright tests
@@ -53,22 +50,18 @@ jobs:
         pytest tests/ --alluredir=./allure-results
       continue-on-error: true
 
-    # Отладка: проверка содержимого allure-results
-    - name: Debug allure-results
+    # Проверка результатов тестов
+    - name: Check test results
       run: |
-        ls -la allure-results || echo "allure-results directory is empty"
+        ls -la allure-results || echo "No test results generated"
 
-    # Генерация отчета Allure с историей
+    # Генерация отчета
     - name: Generate Allure Report
       if: always()
       run: |
         npm install -g allure-commandline
         allure generate ./allure-results -o ./allure-report --clean
-
-    # Отладка: проверка содержимого allure-report/history после генерации
-    - name: Debug generated history
-      run: |
-        ls -la allure-report/history || echo "History directory is empty after generation"
+        ls -la allure-report/history || echo "No history in report"
 
     # Сохранение новой истории
     - name: Save new history
@@ -76,14 +69,9 @@ jobs:
       run: |
         mkdir -p gh-pages/history
         cp -r allure-report/history/* gh-pages/history/
-        echo "New history saved to gh-pages/history"
+        ls -la gh-pages/history || echo "No history saved to gh-pages"
 
-    # Отладка: проверка содержимого gh-pages/history перед деплоем
-    - name: Debug saved history
-      run: |
-        ls -la gh-pages/history || echo "gh-pages/history is empty"
-
-    # Деплой отчета и истории на GitHub Pages
+    # Деплой на GitHub Pages
     - name: Deploy Allure Report to GitHub Pages
       if: always()
       uses: peaceiris/actions-gh-pages@v4
@@ -92,7 +80,7 @@ jobs:
         publish_dir: ./allure-report
         keep_files: true
 
-    # Сохранение результатов тестов как артефакт
+    # Загрузка результатов как артефакт
     - name: Upload Allure Results
       if: always()
       uses: actions/upload-artifact@v4
