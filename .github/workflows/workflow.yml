@@ -9,7 +9,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+    # Чекаут основного кода
     - uses: actions/checkout@v4
+
+    # Установка Python и зависимостей
     - name: Set up Python
       uses: actions/setup-python@v5
       with:
@@ -21,6 +24,7 @@ jobs:
         pip install -r requirements.txt
         playwright install --with-deps
 
+    # Скачивание предыдущей истории из gh-pages
     - name: Download previous Allure history
       uses: actions/checkout@v4
       with:
@@ -28,38 +32,48 @@ jobs:
         path: gh-pages
       continue-on-error: true
 
+    # Подготовка истории для генерации отчета
     - name: Prepare history directory
       run: |
         mkdir -p allure-report/history
         if [ -d "gh-pages/history" ]; then
           cp -r gh-pages/history/* allure-report/history/
+          echo "History copied from gh-pages"
+        else
+          echo "No previous history found in gh-pages"
         fi
 
+    # Запуск тестов
     - name: Run Playwright tests
       run: |
         pytest tests/ --alluredir=./allure-results
       continue-on-error: true
 
+    # Генерация отчета Allure с историей
     - name: Generate Allure Report
       if: always()
       run: |
         npm install -g allure-commandline
         allure generate ./allure-results -o ./allure-report --clean
 
-    - name: Copy new history
+    # Сохранение новой истории
+    - name: Save new history
       if: always()
       run: |
-        mkdir -p allure-report/history
-        cp -r allure-report/history/* gh-pages/history/ 2>/dev/null || true
+        mkdir -p gh-pages/history
+        cp -r allure-report/history/* gh-pages/history/
+        echo "New history saved to gh-pages/history"
 
+    # Деплой отчета и истории на GitHub Pages
     - name: Deploy Allure Report to GitHub Pages
       if: always()
       uses: peaceiris/actions-gh-pages@v4
       with:
-        github_token: ${{ secrets.TOKEN }}  # Изменено на DEPLOY_TOKEN
+        github_token: ${{ secrets.TOKEN }}
         publish_dir: ./allure-report
         keep_files: true
 
+    # Сохранение результатов тестов как артефакт
     - name: Upload Allure Results
       if: always()
       uses: actions/upload-artifact@v4
