@@ -42,12 +42,21 @@ jobs:
         else
           echo "No previous history found in gh-pages"
         fi
+    # Отладка: проверка содержимого истории после копирования
+    - name: Debug history after copy
+      run: |
+        ls -la allure-report/history || echo "History directory is empty after copy"
 
     # Запуск тестов
     - name: Run Playwright tests
       run: |
         pytest tests/ --alluredir=./allure-results
       continue-on-error: true
+
+    # Отладка: проверка содержимого allure-results
+    - name: Debug allure-results
+      run: |
+        ls -la allure-results || echo "allure-results directory is empty"
 
     # Генерация отчета Allure с историей
     - name: Generate Allure Report
@@ -56,6 +65,11 @@ jobs:
         npm install -g allure-commandline
         allure generate ./allure-results -o ./allure-report --clean
 
+    # Отладка: проверка содержимого allure-report/history после генерации
+    - name: Debug generated history
+      run: |
+        ls -la allure-report/history || echo "History directory is empty after generation"
+
     # Сохранение новой истории
     - name: Save new history
       if: always()
@@ -63,6 +77,11 @@ jobs:
         mkdir -p gh-pages/history
         cp -r allure-report/history/* gh-pages/history/
         echo "New history saved to gh-pages/history"
+
+    # Отладка: проверка содержимого gh-pages/history перед деплоем
+    - name: Debug saved history
+      run: |
+        ls -la gh-pages/history || echo "gh-pages/history is empty"
 
     # Деплой отчета и истории на GitHub Pages
     - name: Deploy Allure Report to GitHub Pages

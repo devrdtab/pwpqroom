@@ -11,6 +11,7 @@ def test_start(page, tests_iteration):
 # @pytest.mark.skip('Default title test')
 @allure.feature('общий функционал')
 @allure.story('story общий функционал')
+@allure.title("*** Test example ***")
 def test_home_page_title(page):
     """Проверка заголовка главной страницы"""
     with allure.step('открываем страницу и смотрим на title'):
@@ -93,4 +94,3 @@ def test_go_to_quest(page):
 # def test_filter_params(page):
 #     """Проверка выбора параметров фильтра"""
 #     pass
-
