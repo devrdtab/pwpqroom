@@ -74,7 +74,7 @@ def test_change_category(page):
     home_page.open()
     home_page.goto_category()
     assert home_page.get_current_url() == f"{BASE_URL}/category/children", "Категория не переключилась"
-    assert home_page.category_title() == "Все детские квесты Киева", "Заголовок категория не актуальный"
+    assert home_page.category_title() == "Все детские квесты Киева1", "Заголовок категория не актуальный"
 
 
 def test_go_to_quest(page):
