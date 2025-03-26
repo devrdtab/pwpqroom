@@ -6,10 +6,11 @@ on:
       deployment_target:
         description: Choose target
         required: true
-        default: all
+        default: Run tests with Allure report
         type: choice
         options:
-          - all
+          - Run tests with Allure report
+          - Run tests
 
 permissions:
   contents: read
@@ -82,9 +83,12 @@ jobs:
         run: python -m pip install --upgrade pip && pip install -r requirements.txt && playwright install --with-deps
       - name: Download all workflow run artifacts
         uses: actions/download-artifact@v4
-      - name: all
-        if: "github.event.inputs.deployment_target == 'all'"
+      - name: Run tests with Allure report
+        if: "github.event.inputs.deployment_target == 'Run tests with Allure report'"
         run: pytest --alluredir=allure-results
+      - name: Run tests
+        if: "github.event.inputs.deployment_target == 'Run tests'"
+        run: pytest tests/
         continue-on-error: true
       - name: Store allure results
         uses: actions/upload-artifact@v4
