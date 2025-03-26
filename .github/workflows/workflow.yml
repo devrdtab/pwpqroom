@@ -4,13 +4,9 @@ on:
   workflow_dispatch:
     inputs:
       deployment_target:
-        description: Choose target
+        description: Select
         required: true
         default: Run tests with Allure report
-        type: choice
-        options:
-          - Run tests with Allure report
-          - Run tests
 
 permissions:
   contents: read
@@ -86,9 +82,6 @@ jobs:
       - name: Run tests with Allure report
         if: "github.event.inputs.deployment_target == 'Run tests with Allure report'"
         run: pytest --alluredir=allure-results
-      - name: Run tests
-        if: "github.event.inputs.deployment_target == 'Run tests'"
-        run: pytest tests/
         continue-on-error: true
       - name: Store allure results
         uses: actions/upload-artifact@v4
