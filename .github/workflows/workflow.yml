@@ -10,9 +10,9 @@ jobs:
 
     steps:
     # Установка зависимостей
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4  # Обновлено до v4
     - name: Set up Python
-      uses: actions/setup-python@v4
+      uses: actions/setup-python@v5  # Обновлено до v5
       with:
         python-version: '3.11'
 
@@ -23,12 +23,12 @@ jobs:
         playwright install --with-deps
 
     # Вытягивание предыдущей истории Allure
-#    - name: Download previous Allure history
-#      uses: actions/checkout@v3
-#      with:
-#        ref: gh-pages
-#        path: gh-pages
-#      continue-on-error: true
+    - name: Download previous Allure history
+      uses: actions/checkout@v4  # Обновлено до v4
+      with:
+        ref: gh-pages
+        path: gh-pages
+      continue-on-error: true
 
     - name: Prepare history directory
       run: |
@@ -60,16 +60,16 @@ jobs:
     # Деплой отчета и истории на GitHub Pages
     - name: Deploy Allure Report to GitHub Pages
       if: always()
-      uses: peaceiris/actions-gh-pages@v3
+      uses: peaceiris/actions-gh-pages@v4  # Обновлено до v4
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         publish_dir: ./allure-report
-        keep_files: true  # Сохраняем существующие файлы (историю)
+        keep_files: true
 
     # Сохранение результатов тестов как артефакт
     - name: Upload Allure Results
       if: always()
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4  # Обновлено до v4
       with:
         name: allure-results
         path: allure-results/
