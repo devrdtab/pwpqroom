@@ -31,16 +31,17 @@ jobs:
         with:
           name: allure-results
           path: allure-history
+        continue-on-error: true  # Предотвращаем ошибку, если артефакта нет
 
       - name: Extract history
         run: |
           mkdir -p allure-results
-          cp -r allure-history/history allure-results || true
+          cp -r allure-history/history allure-results || true  # Переносим историю
 
       - name: Store allure history
         uses: actions/upload-artifact@v4
         with:
-          name: allure-results-${{ github.run_id }}
+          name: allure-results
           path: allure-results
           retention-days: 5
 
@@ -66,8 +67,9 @@ jobs:
       - name: Download Allure history
         uses: actions/download-artifact@v4
         with:
-          name: allure-results-${{ github.run_id }}
+          name: allure-results
           path: allure-results
+        continue-on-error: true
 
       - name: Run tests and collect Allure results
         if: "github.event.inputs.deployment_target == 'all'"
@@ -77,7 +79,7 @@ jobs:
       - name: Store new Allure results
         uses: actions/upload-artifact@v4
         with:
-          name: allure-results-${{ github.run_id }}
+          name: allure-results
           path: allure-results
           retention-days: 5
 
@@ -100,15 +102,15 @@ jobs:
       - name: Download Allure results
         uses: actions/download-artifact@v4
         with:
-          name: allure-results-${{ github.run_id }}
+          name: allure-results
           path: allure-results
 
       - name: Generate Allure Report
         run: |
           mkdir -p allure-history
-          cp -r allure-results/history allure-history || true
+          cp -r allure-results/history allure-history || true  # Переносим историю трендов
           allure generate allure-results --clean -o _site
-          cp -r allure-history _site/history  # Сохраняем историю
+          cp -r allure-history _site/history  # Добавляем историю в новый отчет
 
       - name: Store generated report
         uses: actions/upload-artifact@v4
@@ -123,7 +125,7 @@ jobs:
     needs: generate-report
     name: Report publication
     environment:
-      name: github-pages  # Указываем нужное окружение для деплоя
+      name: github-pages  # Окружение для деплоя
     steps:
       - name: Download Allure Report
         uses: actions/download-artifact@v4
