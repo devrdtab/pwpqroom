@@ -4,7 +4,6 @@ on:
   workflow_dispatch:
     inputs:
       deployment_target:
-        description: Select
         required: true
         default: Run tests with Allure report
 
