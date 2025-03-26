@@ -56,7 +56,7 @@ jobs:
       if: always()
       uses: peaceiris/actions-gh-pages@v4
       with:
-        github_token: ${{ secrets.DEPLOY_TOKEN }}  # Изменено на DEPLOY_TOKEN
+        github_token: ${{ secrets.TOKEN }}  # Изменено на DEPLOY_TOKEN
         publish_dir: ./allure-report
         keep_files: true
 
