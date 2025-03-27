@@ -1,7 +1,11 @@
 name: Playwright Pytest with Allure
 
+#on:
+#  workflow_dispatch:
 on:
-  workflow_dispatch:
+  push:
+    branches:
+      - main  # Укажите ветку, например, main
 
 jobs:
   download-history:
