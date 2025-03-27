@@ -37,7 +37,7 @@ jobs:
     - name: Upload history artifact
       uses: actions/upload-artifact@v4
       with:
-        name: allure-results
+        name: allure-results-history  # Уникальное имя
         path: allure-results/
         retention-days: 1
 
@@ -59,7 +59,7 @@ jobs:
     - name: Download history artifact
       uses: actions/download-artifact@v4
       with:
-        name: allure-results
+        name: allure-results-history
         path: allure-results/
     - name: Run Playwright tests
       run: |
@@ -71,7 +71,7 @@ jobs:
     - name: Upload test results artifact
       uses: actions/upload-artifact@v4
       with:
-        name: allure-results
+        name: allure-results-tests  # Уникальное имя
         path: allure-results/
         retention-days: 1
 
@@ -84,7 +84,7 @@ jobs:
     - name: Download test results artifact
       uses: actions/download-artifact@v4
       with:
-        name: allure-results
+        name: allure-results-tests
         path: allure-results/
     - name: Generate Allure Report
       if: always()
@@ -101,7 +101,7 @@ jobs:
     - name: Upload report artifact
       uses: actions/upload-artifact@v4
       with:
-        name: allure-report
+        name: allure-report  # Уникальное имя
         path: allure-report/
         retention-days: 1
 
@@ -119,7 +119,7 @@ jobs:
     - name: Download test results artifact
       uses: actions/download-artifact@v4
       with:
-        name: allure-results
+        name: allure-results-tests
         path: allure-results/
     - name: Deploy Allure Report to GitHub Pages
       if: always()
@@ -129,9 +129,8 @@ jobs:
         publish_dir: ./allure-report
         keep_files: true
     - name: Upload Allure Results
-      if: always()
       uses: actions/upload-artifact@v4
       with:
-        name: allure-results
+        name: allure-results-final  # Уникальное имя
         path: allure-results/
         retention-days: 7
