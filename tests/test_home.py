@@ -42,7 +42,7 @@ def test_copyright(page, request):
     home_page = HomePage(page)
     home_page.open()
     datecopyright = home_page.check_copyright()
-    assert datecopyright == (f"© 2015—{get_current_year()} Q-ROOM1"), "Copyright не соответствует"
+    assert datecopyright == (f"© 2015—{get_current_year()} Q-ROOM"), "Copyright не соответствует"
 
 
 def test_search_field(page):
@@ -57,7 +57,7 @@ def test_search_field(page):
     # Проверить количество результатов и наличие VENOM в первом элементе
     result_count, has_venom = home_page.get_result_count()
     assert result_count >= 3, f"Ожидалось хотя бы 3 результата, но найдено {result_count}"
-    assert has_venom, "1Первый результат не содержит 'VENOM'"
+    assert has_venom, "Первый результат не содержит 'VENOM'"
     print(f"✅ Найдено {result_count} результатов. Первый результат содержит 'VENOM': {has_venom}")
 
 
@@ -75,7 +75,7 @@ def test_change_category(page):
     home_page.open()
     home_page.goto_category()
     assert home_page.get_current_url() == f"{BASE_URL}/category/children", "Категория не переключилась"
-    assert home_page.category_title() == "Все детские квесты Киева1", "Заголовок категория не актуальный"
+    assert home_page.category_title() == "Все детские квесты Киева", "Заголовок категория не актуальный"
 
 
 def test_go_to_quest(page):
@@ -84,7 +84,7 @@ def test_go_to_quest(page):
     home_page.open()
     home_page.go_to_quest()
     assert home_page.get_current_url() == f"{BASE_URL}/quests/mayn", "url квеста не актуальный"
-    assert home_page.quest_title() == "Квест «Майн», Киев1", "Заголовок квеста не соответствует"
+    assert home_page.quest_title() == "Квест «Майн», Киев", "Заголовок квеста не соответствует"
 
 
 # def test_open_filter(page):

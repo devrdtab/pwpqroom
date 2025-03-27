@@ -15,7 +15,7 @@ jobs:
     - name: Set up Python
       uses: actions/setup-python@v5
       with:
-        python-version: '3.11'
+        python-version: '3.13'
 
     - name: Install dependencies
       run: |
@@ -64,8 +64,6 @@ jobs:
     needs: test
     name: Generate report
     steps:
-
-
     # Генерация отчета
     - name: Generate Allure Report
       if: always()
@@ -73,7 +71,6 @@ jobs:
         npm install -g allure-commandline
         allure generate ./allure-results -o ./allure-report --clean
         ls -la allure-report/history || echo "No history in report"
-
     # Сохранение новой истории
     - name: Save new history
       if: always()
@@ -94,7 +91,6 @@ jobs:
         github_token: ${{ secrets.TOKEN }}
         publish_dir: ./allure-report
         keep_files: true
-
     # Загрузка результатов как артефакт
     - name: Upload Allure Results
       if: always()
