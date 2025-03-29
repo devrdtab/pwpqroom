@@ -5,27 +5,27 @@ from pages.home_page import HomePage
 from utils.constants import BASE_URL
 from utils.date_utils import get_current_year
 
-def test_start(page, tests_iteration):
-    pass
+# def test_start(page, tests_iteration):
+#     pass
 
 # @pytest.mark.skip('Default title test')
-@allure.title('Title страницы')
-@allure.description_html('Проверка заголовка главной страницы')
+@allure.title('Homepage Title')
+@allure.description_html('Checking the Home Page Title')
 @allure.issue('https://example.com/browse/BUG-001', name='BUG-001')
-@allure.feature('Заголовое главной страницы')
-@allure.story('story Общий функционал работы сайта')
-def test_home_page_title(page):
+@allure.feature('Main Page Title')
+@allure.story('story General functionality of the site')
+def test_home_page_title(page, tests_iteration):
     with allure.step('Открываем главную страницу'):
         home_page = HomePage(page)
         home_page.open()
     with allure.step('Сверяем title'):
         assert home_page.get_title() == "Квест комнаты Киев, независимый рейтинг квестов - реальные отзывы, обзоры на портале | Q-ROOM", "ЗАГОЛОВОК title НЕ СОВПАДАЕТ"
 
-@allure.title('Переключение языка')
-@allure.description_html('Проверка работы переключения языка')
+@allure.title('Switch language')
+@allure.description_html('Checking the language switching operation')
 @allure.issue('https://example.com/browse/BUG-002', name='BUG-002')
 @allure.feature('Languages')
-@allure.story('story Общий функционал работы сайта')
+@allure.story('story General functionality of the site')
 def test_switch_language(page):
     with allure.step('Открываем главную страницу'):
         home_page = HomePage(page)
@@ -36,11 +36,11 @@ def test_switch_language(page):
         assert home_page.get_current_url() == f"{BASE_URL}/ua", "Язык не переключился"
 
 # @pytest.mark.regression
-@allure.title('Переключение города')
-@allure.description_html('Проверка работы переключения городов')
+@allure.title('Switching cities')
+@allure.description_html('Checking the operation of city switching')
 @allure.issue('https://example.com/browse/BUG-003', name='BUG-003')
 @allure.feature('City changes')
-@allure.story('story Общий функционал работы сайта')
+@allure.story('story General functionality of the site')
 def test_change_city(page):
     with allure.step('Открываем главную страницу'):
         home_page = HomePage(page)
@@ -51,11 +51,11 @@ def test_change_city(page):
         assert home_page.get_current_url() == 'https://lvov.q-room.com/', "Город не переключился"
 
 
-@allure.title('Копирайтинг')
-@allure.description_html('Проверка даты копирайтинга')
+@allure.title('Copywriting')
+@allure.description_html('Check date copywritingа')
 @allure.issue('https://example.com/browse/BUG-04', name='BUG-004')
 @allure.feature('Copyright date')
-@allure.story('story Общий функционал работы сайта')
+@allure.story('story General functionality of the site')
 def test_copyright(page, request):
     # test_name = request.node.name
     with allure.step('Открываем главную страницу'):
@@ -66,11 +66,11 @@ def test_copyright(page, request):
     with allure.step('Сравниваем год в поле Copyright с текущим годом'):
         assert datecopyright == (f"© 2015—{get_current_year()} Q-ROOM"), "Copyright не соответствует"
 
-@allure.title('Поле поиск')
-@allure.description_html('Проверяем работу поля поиска квестов')
+@allure.title('Search field')
+@allure.description_html('Checking the operation of the quest search field')
 @allure.issue('https://example.com/browse/BUG-05', name='BUG-005')
-@allure.feature('Поиск')
-@allure.story('story Поле поиска квестов')
+@allure.feature('Search')
+@allure.story('story Quest search field')
 def test_search_field(page):
     with allure.step('Открываем главную страницу'):
         home_page = HomePage(page)
@@ -89,11 +89,11 @@ def test_search_field(page):
         # print(f"✅ Найдено {result_count} результатов. Первый результат содержит 'VENOM': {has_venom}")
 
 
-@allure.title('Отобразить/скрыть seo текст')
-@allure.description_html('Проверяем работу функционала отображения/скрытия')
+@allure.title('Show/hide full text')
+@allure.description_html('Checking the display/hide functionality')
 @allure.issue('https://example.com/browse/BUG-06', name='BUG-005')
 @allure.feature('Toggle (Show/hide)')
-@allure.story('story Общий функционал работы сайта')
+@allure.story('story General functionality of the site')
 def test_read_more_active(page):
     with allure.step('Открываем главную страницу'):
         home_page = HomePage(page)
@@ -103,11 +103,11 @@ def test_read_more_active(page):
     with allure.step('Проверяем что текст полностью раскрылся'):
         assert home_page.is_element_active(), "Элемент .readmore__hide не получил класс 'active'"
 
-@allure.title('Перехода на страницу категории')
-@allure.description_html('Проверяем работу перехода на страницу категории при клике на ссылку')
+@allure.title('Go to category page')
+@allure.description_html('Checking redirect to a category page works when clicking on a link')
 @allure.issue('https://example.com/browse/BUG-07', name='BUG-007')
 @allure.feature('Category change')
-@allure.story('story Общий функционал работы сайта')
+@allure.story('story General functionality of the site')
 def test_change_category(page):
     with allure.step('Открываем главную страницу'):
         home_page = HomePage(page)
@@ -118,11 +118,11 @@ def test_change_category(page):
         assert home_page.get_current_url() == f"{BASE_URL}/category/children", "Категория не переключилась"
         assert home_page.category_title() == "Все детские квесты Киева", "Заголовок категория не актуальный"
 
-@allure.title('Переход на страницу квеста')
-@allure.description_html('Проверяем работу перехода на страницу квеста при клике на ссылку')
+@allure.title('Go to the quest page')
+@allure.description_html('Checking redirect to the quest page when clicking on the link')
 @allure.issue('https://example.com/browse/BUG-08', name='BUG-008')
 @allure.feature('Quest change')
-@allure.story('story Общий функционал работы сайта')
+@allure.story('story General functionality of the site')
 def test_go_to_quest(page):
     with allure.step('Открываем главную страницу'):
         home_page = HomePage(page)
