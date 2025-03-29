@@ -7,4 +7,4 @@ _helpers/
 allure-results/
 allure-report/
 artifacts/
-_dev.yml
+_helpers/_dev.yml

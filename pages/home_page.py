@@ -65,19 +65,69 @@ class HomePage(BasePage):
 
     def goto_category(self):
         self.page.locator(".home-search .top-search-gender .quest-category a").nth(3).click()
-        # self.page.wait_for_selector(".home-search .top-search-gender .quest-category a", state="visible", timeout=10000)
+        # self.page.wait_for_selector(".home-search .top-search-gender .quest-category a", state="visible", timeout=10000")
         # self.page.locator(".home-search .top-search-gender .quest-category a:nth-of-type(3)").click()
 
     def category_title(self):
         return self.page.locator(".home-search .top-search-gender .search-title").inner_text()
 
-    def go_to_quest(self):
-        self.page.locator("#filtertab-1 .row .quest-item-wrapper").nth(3).click()
 
-    def quest_title(self):
-        return self.page.locator(".top-quest-info__name").inner_text().strip()
+
+
+
+
+
+    def go_to_quest(self):
+        quest_locator = "#filtertab-1 .filter-result .row .col-xl-4.col-lg-4.col-md-4.col-sm-12:nth-child(3)"
+        link_locator = f"{quest_locator} a.full-link"
+        name_locator = f"{quest_locator} .quest-name > div a"
+
+        # Дожидаемся появления элементов
+        self.page.wait_for_selector(name_locator, state="visible", timeout=10000)
+        self.page.wait_for_selector(link_locator, state="attached", timeout=10000)
+
+        # Получаем название и ссылку
+        element_name = self.page.locator(name_locator).inner_text()
+        element_link = self.page.locator(link_locator).get_attribute("href")
+
+        # Кликаем по элементу
+        self.page.locator(quest_locator).click(timeout=10000)
+
+        # Ждем загрузки новой страницы
+        self.page.wait_for_load_state("networkidle")
+
+        return element_name, element_link
+
+        # print(f"LINK: {element_link}")
+        # print(f"CURRENT URL: {self.page.url}")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    # def quest_title(self):
+    #     return self.page.locator(".top-quest-info__name").inner_text().strip()
         # self.page.wait_for_selector(".top-quest-info__name", state="visible", timeout=10000)
         # return self.page.locator(".top-quest-info__name").text_content().strip()
 
-    def filter_open(self):
-        self.page.locator('#wrap_toggle').click()
+    # def filter_open(self):
+    #     self.page.locator('#wrap_toggle').click()
