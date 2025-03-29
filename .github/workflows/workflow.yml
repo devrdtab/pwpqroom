@@ -5,7 +5,7 @@ name: Playwright Pytest with Allure
 on:
   push:
     branches:
-      - main  # Укажите ветку, например, main
+      - main  # Set the branch, exp: main
 
 jobs:
   download-history:
