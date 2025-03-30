@@ -13,7 +13,7 @@ from utils.date_utils import get_current_year
 @allure.description_html('Checking the Home Page Title')
 @allure.issue('https://example.com/browse/BUG-001', name='BUG-001')
 @allure.feature('Main Page Title')
-@allure.story('story General functionality of the site')
+@allure.story('General functionality of the site')
 def test_home_page_title(page, tests_iteration):
     with allure.step('Открываем главную страницу'):
         home_page = HomePage(page)
@@ -25,7 +25,7 @@ def test_home_page_title(page, tests_iteration):
 @allure.description_html('Checking the language switching operation')
 @allure.issue('https://example.com/browse/BUG-002', name='BUG-002')
 @allure.feature('Languages')
-@allure.story('story General functionality of the site')
+@allure.story('General functionality of the site')
 def test_switch_language(page):
     with allure.step('Открываем главную страницу'):
         home_page = HomePage(page)
@@ -40,7 +40,7 @@ def test_switch_language(page):
 @allure.description_html('Checking the operation of city switching')
 @allure.issue('https://example.com/browse/BUG-003', name='BUG-003')
 @allure.feature('City changes')
-@allure.story('story General functionality of the site')
+@allure.story('General functionality of the site')
 def test_change_city(page):
     with allure.step('Открываем главную страницу'):
         home_page = HomePage(page)
@@ -55,7 +55,7 @@ def test_change_city(page):
 @allure.description_html('Check date copywritingа')
 @allure.issue('https://example.com/browse/BUG-04', name='BUG-004')
 @allure.feature('Copyright date')
-@allure.story('story General functionality of the site')
+@allure.story('General functionality of the site')
 def test_copyright(page, request):
     # test_name = request.node.name
     with allure.step('Открываем главную страницу'):
@@ -70,7 +70,7 @@ def test_copyright(page, request):
 @allure.description_html('Checking the operation of the quest search field')
 @allure.issue('https://example.com/browse/BUG-05', name='BUG-005')
 @allure.feature('Search')
-@allure.story('story Quest search field')
+@allure.story('Quest search field')
 def test_search_field(page):
     with allure.step('Открываем главную страницу'):
         home_page = HomePage(page)
@@ -93,7 +93,7 @@ def test_search_field(page):
 @allure.description_html('Checking the display/hide functionality')
 @allure.issue('https://example.com/browse/BUG-06', name='BUG-005')
 @allure.feature('Toggle (Show/hide)')
-@allure.story('story General functionality of the site')
+@allure.story('General functionality of the site')
 def test_read_more_active(page):
     with allure.step('Открываем главную страницу'):
         home_page = HomePage(page)
@@ -107,7 +107,7 @@ def test_read_more_active(page):
 @allure.description_html('Checking redirect to a category page works when clicking on a link')
 @allure.issue('https://example.com/browse/BUG-07', name='BUG-007')
 @allure.feature('Category change')
-@allure.story('story General functionality of the site')
+@allure.story('General functionality of the site')
 def test_change_category(page):
     with allure.step('Открываем главную страницу'):
         home_page = HomePage(page)
@@ -122,32 +122,25 @@ def test_change_category(page):
 @allure.description_html('Checking redirect to the quest page when clicking on the link')
 @allure.issue('https://example.com/browse/BUG-08', name='BUG-008')
 @allure.feature('Quest change')
-@allure.story('story General functionality of the site')
+@allure.story('General functionality of the site')
 def test_go_to_quest(page):
     with allure.step('Открываем главную страницу'):
         home_page = HomePage(page)
         home_page.open()
-
     with allure.step('В списке квестов кликаем на квест и получаем данные'):
         element_name, element_link = home_page.go_to_quest()
-
-    with allure.step('Проверяем что отобразилась страница и имеет те же имя и ссылку'):
+    with allure.step('Проверяем что отобразилась страница и имеет ту же ссылку'):
         current_url = home_page.get_current_url()
         expected_url = "https://q-room.com/quests/maetok-monstriv"
-
         assert current_url == expected_url, f"Ожидаемый URL: {expected_url}, получен: {current_url}"
-
+    with allure.step('Проверяем что отобразилась страница и имеет тот же заголовок'):
         displayed_name = page.locator(".top-quest-info__name").inner_text().strip()
         # Убираем "Квест", ", Киев" и кавычки
-        cleaned_displayed_name = displayed_name.replace("Квест", "", 1).rstrip(", Киев").replace("«", "").replace("»",
-                                                                                                                  "").strip()
-
+        cleaned_displayed_name = displayed_name.replace("Квест", "", 1).rstrip(", Киев").replace("«", "").replace("»", "").strip()
         # Нормализуем element_name, убирая кавычки, если они есть
         cleaned_element_name = element_name.replace("«", "").replace("»", "").strip()
-
         assert cleaned_element_name == cleaned_displayed_name, \
             f"Ожидаемое название '{cleaned_element_name}', получено '{cleaned_displayed_name}'"
-
         # print(f"*****CURRENT URL: {current_url}")
         # print(f"*****ORIGINAL QUEST NAME: {element_name}")
         # print(f"*****CLEANED QUEST NAME: {cleaned_element_name}")
@@ -155,6 +148,23 @@ def test_go_to_quest(page):
         # print(f"*****CLEANED DISPLAYED NAME: {cleaned_displayed_name}")
 
 
+@allure.title('Filter params')
+@allure.description_html('Checking filter params')
+@allure.issue('https://example.com/browse/BUG-09', name='BUG-009')
+@allure.feature('Filter')
+@allure.story('General functionality of the site')
+def test_check_filter_params(page):
+    with allure.step('Открываем главную страницу'):
+        home_page = HomePage(page)
+        home_page.open()
+    with allure.step('Выбираем параметры фильтра'):
+        home_page.filter_select_params()
+    with allure.step('Проверяем, что URL содержит выбранные параметры фильтра'):
+        current_url = home_page.get_current_url()
+        expected_url = 'https://q-room.com/?age=7&genre=horror&players=2&price=650,850'
+        assert current_url == expected_url, f"Ожидаемый URL: {expected_url}, получен: {current_url}"
+
+        print(f"*****CURRENT URL: {current_url}")
 
 
 
