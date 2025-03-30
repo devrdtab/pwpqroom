@@ -21,7 +21,7 @@ os.makedirs(SCREENSHOT_DIR, exist_ok=True)
 def browser(request):
     """Фикстура для запуска тестов в Chrome, Firefox, WebKit"""
     with sync_playwright() as playwright:
-        browser = getattr(playwright, request.param).launch(headless=False)
+        browser = getattr(playwright, request.param).launch(headless=True)
         yield browser
         browser.close()
 
