@@ -1,0 +1,5 @@
+URL after apply (immediate): https://q-room.com/
+URL updated successfully to expected value
+*****CURRENT URL: https://q-room.com/?age=7&genre=horror&players=2&price=650,850
+
+= = = = = Iteration Finished = = = = = 
