@@ -5,8 +5,8 @@ from pages.home_page import HomePage
 from utils.constants import BASE_URL
 from utils.date_utils import get_current_year
 
-# def test_start(page, tests_iteration):
-#     pass
+def test_start(page, tests_iteration):
+    pass
 
 # @pytest.mark.skip('Default title test')
 @allure.title('Homepage Title')
@@ -14,7 +14,7 @@ from utils.date_utils import get_current_year
 @allure.issue('https://example.com/browse/BUG-001', name='BUG-001')
 @allure.feature('Main Page Title')
 @allure.story('General functionality of the site')
-def test_home_page_title(page, tests_iteration):
+def test_home_page_title(page):
     with allure.step('Открываем главную страницу'):
         home_page = HomePage(page)
         home_page.open()
