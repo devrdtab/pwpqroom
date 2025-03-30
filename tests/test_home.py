@@ -148,9 +148,29 @@ def test_go_to_quest(page):
         # print(f"*****CLEANED DISPLAYED NAME: {cleaned_displayed_name}")
 
 
+@allure.title('Filter params open/close')
+@allure.description_html('Checking filter open')
+@allure.issue('https://example.com/browse/BUG-09', name='BUG-009')
+@allure.feature('Filter')
+@allure.story('General functionality of the site')
+def test_check_filter_open_close(page):
+    with allure.step('Открываем главную страницу'):
+        home_page = HomePage(page)
+        home_page.open()
+    with allure.step('Выполняем открытие и закрытие фильтра'):
+        home_page.filter_open_close()
+    with allure.step('Проверяем, что фильтр закрыт'):
+        filter_container = page.locator("#filter-container")
+        style = filter_container.get_attribute("style")
+        assert style == "display: none;", f"Ожидался style='display: none;', получен '{style}'"
+
+
+
+
+
 @allure.title('Filter params')
 @allure.description_html('Checking filter params')
-@allure.issue('https://example.com/browse/BUG-09', name='BUG-009')
+@allure.issue('https://example.com/browse/BUG-10', name='BUG-010')
 @allure.feature('Filter')
 @allure.story('General functionality of the site')
 def test_check_filter_params(page):
@@ -165,6 +185,9 @@ def test_check_filter_params(page):
         assert current_url == expected_url, f"Ожидаемый URL: {expected_url}, получен: {current_url}"
 
         print(f"*****CURRENT URL: {current_url}")
+
+
+
 
 
 

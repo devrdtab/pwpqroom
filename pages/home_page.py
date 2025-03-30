@@ -145,6 +145,20 @@ class HomePage(BasePage):
     # def get_current_url(self):
     #     return self.page.url
 
+    def filter_open_close(self):
+        # Открываем фильтр
+        filter_open = self.page.wait_for_selector("#expand-btn-container", state="visible", timeout=10000)
+        filter_open.click()
+        print("Filter opened")
+
+        # Проверяем кнопку закрытия
+        filter_close = self.page.wait_for_selector(".close-filter", state="visible", timeout=10000)
+        print(f"Close button visible: {filter_close.is_visible()}, enabled: {filter_close.is_enabled()}")
+        filter_close.click()
+        print("Filter closed")
+
+
+
     def filter_select_params(self):
         # Открываем фильтр
         self.page.wait_for_selector("#wrap_toggle", state="visible", timeout=10000)

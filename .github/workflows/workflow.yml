@@ -1,11 +1,11 @@
 name: Playwright Pytest with Allure
 
-#on:
-#  workflow_dispatch:
 on:
-  push:
-    branches:
-      - main  # Set the branch, exp: main
+  workflow_dispatch:
+#on:
+#  push:
+#    branches:
+#      - main  # Set the branch, exp: main
 
 jobs:
   download-history:
