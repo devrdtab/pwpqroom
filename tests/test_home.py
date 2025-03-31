@@ -5,8 +5,10 @@ from pages.home_page import HomePage
 from utils.constants import BASE_URL
 from utils.date_utils import get_current_year
 
+
 def test_start(page, tests_iteration):
     pass
+
 
 # @pytest.mark.skip('Default title test')
 @allure.title('Homepage Title')
@@ -21,6 +23,7 @@ def test_home_page_title(page):
     with allure.step('Сверяем title'):
         assert home_page.get_title() == "Квест комнаты Киев, независимый рейтинг квестов - реальные отзывы, обзоры на портале | Q-ROOM", "ЗАГОЛОВОК title НЕ СОВПАДАЕТ"
 
+
 @allure.title('Switch language')
 @allure.description_html('Checking the language switching operation')
 @allure.issue('https://example.com/browse/BUG-002', name='BUG-002')
@@ -34,6 +37,7 @@ def test_switch_language(page):
         home_page.switch_language()
     with allure.step('Проверяем перфикс в url на наличие нужного языка'):
         assert home_page.get_current_url() == f"{BASE_URL}/ua", "Язык не переключился"
+
 
 # @pytest.mark.regression
 @allure.title('Switching cities')
@@ -65,6 +69,7 @@ def test_copyright(page, request):
         datecopyright = home_page.check_copyright()
     with allure.step('Сравниваем год в поле Copyright с текущим годом'):
         assert datecopyright == (f"© 2015—{get_current_year()} Q-ROOM"), "Copyright не соответствует"
+
 
 @allure.title('Search field')
 @allure.description_html('Checking the operation of the quest search field')
@@ -103,6 +108,7 @@ def test_read_more_active(page):
     with allure.step('Проверяем что текст полностью раскрылся'):
         assert home_page.is_element_active(), "Элемент .readmore__hide не получил класс 'active'"
 
+
 @allure.title('Go to category page')
 @allure.description_html('Checking redirect to a category page works when clicking on a link')
 @allure.issue('https://example.com/browse/BUG-07', name='BUG-007')
@@ -117,6 +123,7 @@ def test_change_category(page):
     with allure.step('Проверяем что отобразиласьs страница с дескими квестами и url /category/children'):
         assert home_page.get_current_url() == f"{BASE_URL}/category/children", "Категория не переключилась"
         assert home_page.category_title() == "Все детские квесты Киева", "Заголовок категория не актуальный"
+
 
 @allure.title('Go to the quest page')
 @allure.description_html('Checking redirect to the quest page when clicking on the link')
@@ -136,7 +143,8 @@ def test_go_to_quest(page):
     with allure.step('Проверяем что отобразилась страница и имеет тот же заголовок'):
         displayed_name = page.locator(".top-quest-info__name").inner_text().strip()
         # Убираем "Квест", ", Киев" и кавычки
-        cleaned_displayed_name = displayed_name.replace("Квест", "", 1).rstrip(", Киев").replace("«", "").replace("»", "").strip()
+        cleaned_displayed_name = displayed_name.replace("Квест", "", 1).rstrip(", Киев").replace("«", "").replace("»",
+                                                                                                                  "").strip()
         # Нормализуем element_name, убирая кавычки, если они есть
         cleaned_element_name = element_name.replace("«", "").replace("»", "").strip()
         assert cleaned_element_name == cleaned_displayed_name, \
@@ -165,9 +173,6 @@ def test_check_filter_open_close(page):
         assert style == "display: none;", f"Ожидался style='display: none;', получен '{style}'"
 
 
-
-
-
 @allure.title('Filter params')
 @allure.description_html('Checking filter params')
 @allure.issue('https://example.com/browse/BUG-10', name='BUG-010')
@@ -185,40 +190,6 @@ def test_check_filter_params(page):
         assert current_url == expected_url, f"Ожидаемый URL: {expected_url}, получен: {current_url}"
 
         print(f"*****CURRENT URL: {current_url}")
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 # def test_open_filter(page):
 #     """Проверка открытия фильтра"""

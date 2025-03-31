@@ -71,7 +71,6 @@ class HomePage(BasePage):
     def category_title(self):
         return self.page.locator(".home-search .top-search-gender .search-title").inner_text()
 
-
     def go_to_quest(self):
         quest_locator = "#filtertab-1 .filter-result .row .col-xl-4.col-lg-4.col-md-4.col-sm-12:nth-child(3)"
         link_locator = f"{quest_locator} a.full-link"
@@ -157,8 +156,6 @@ class HomePage(BasePage):
         filter_close.click()
         print("Filter closed")
 
-
-
     def filter_select_params(self):
         # Открываем фильтр
         self.page.wait_for_selector("#wrap_toggle", state="visible", timeout=10000)
@@ -202,31 +199,35 @@ class HomePage(BasePage):
             self.page.screenshot(path="after_apply_failure.png")  # Скриншот для отладки
             raise  # Повторно выбрасываем исключение, чтобы тест упал
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     # def quest_title(self):
     #     return self.page.locator(".top-quest-info__name").inner_text().strip()
-        # self.page.wait_for_selector(".top-quest-info__name", state="visible", timeout=10000)
-        # return self.page.locator(".top-quest-info__name").text_content().strip()
+    # self.page.wait_for_selector(".top-quest-info__name", state="visible", timeout=10000)
+    # return self.page.locator(".top-quest-info__name").text_content().strip()
 
     # def filter_open(self):
     #     self.page.locator('#wrap_toggle').click()
+
+    def toggle_burger_menu(self):
+        """Открывает/закрывает бургер-меню и возвращает статус активности"""
+        burger = self.page.locator(".burger")
+        system_links = self.page.locator(".system-links")
+        top_links = self.page.locator(".top-links")
+
+        # Ожидаем, пока бургер станет видимым, и кликаем
+        burger.wait_for(state="visible", timeout=10000)
+        burger.click()
+
+        # Проверяем наличие класса active для обоих элементов
+        is_system_links_active = "active" in (system_links.get_attribute("class") or "")
+        is_top_links_active = "active" in (top_links.get_attribute("class") or "")
+        is_burger_active = "active" in (burger.get_attribute("class") or "")
+
+        # Возвращаем статус активности для .system-links и .top-links
+        return is_system_links_active, is_top_links_active, is_burger_active
+
+    def is_burger_menu_visible(self):
+        """Проверяет, видны ли .system-links и .top-links на экране"""
+        system_links_visible = self.page.locator(".system-links").is_visible()
+        top_links_visible = self.page.locator(".top-links").is_visible()
+        # Возвращаем True, только если оба элемента видимы
+        return system_links_visible and top_links_visible
