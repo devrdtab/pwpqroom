@@ -1,0 +1,6 @@
+Запускаем webkit для устройства iPhone 15 Pro Max с headless=False
+Браузер открыт, контекст создан для iPhone 15 Pro Max
+Размер окна: {'width': 430, 'height': 739}, устройство: iPhone 15 Pro Max
+Закрываем страницу и браузер для iPhone 15 Pro Max
+
+= = = = = Iteration Finished = = = = = 

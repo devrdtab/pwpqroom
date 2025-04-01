@@ -1,0 +1,3 @@
+Filter opened
+Close button visible: True, enabled: True
+Filter closed
