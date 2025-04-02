@@ -58,6 +58,7 @@ qroom/
 │-- utils/                 # Constants and data
 │-- conftest.py            # Pytest fixtures
 │-- requirements.txt       # Dependencies list
+│-- pytest.ini             # Common settings for pytest
 │-- README.md              # Project documentation
 ```
 
