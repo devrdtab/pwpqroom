@@ -21,15 +21,15 @@ async def test_burger_menu_toggle(mobile_page, device):
 
     with allure.step('Кликаем на бургер-меню, проверяем открытие'):
         is_system_links_active, is_top_links_active, is_burger_active = await home_page.toggle_burger_menu()
-        assert is_system_links_active, "Класс .active не добавлен к .system-links после открытия"
-        assert is_top_links_active, "Класс .active не добавлен к .top-links после открытия"
-        assert is_burger_active, "Класс .active не добавлен к .burger после открытия"
+        assert is_system_links_active
+        assert is_top_links_active
+        assert is_burger_active
         assert await home_page.is_burger_menu_visible(), "Меню (.system-links и .top-links) не видно на экране"
 
     with allure.step('Кликаем на бургер-меню снова, проверяем закрытие'):
         is_system_links_active, is_top_links_active, is_burger_active = await home_page.toggle_burger_menu()
         await mobile_page.wait_for_timeout(1000)
-        assert not is_system_links_active, "Класс .active не удален из .system-links после закрытия"
-        assert not is_top_links_active, "Класс .active не удален из .top-links после закрытия"
-        assert not is_burger_active, "Класс .active не удален из .burger после закрытия"
+        assert not is_system_links_active
+        assert not is_top_links_active
+        assert not is_burger_active
         assert not await home_page.is_burger_menu_visible(), "Меню (.system-links и .top-links) все еще видно после закрытия"

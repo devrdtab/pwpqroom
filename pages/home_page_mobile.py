@@ -14,8 +14,10 @@ class AsyncHomePage(BasePage):
         burger = self.page.locator(".burger")
         system_links = self.page.locator(".system-links")
         top_links = self.page.locator(".top-links")
+
         await burger.wait_for(state="visible", timeout=10000)
         await burger.click()
+
         is_system_links_active = "active" in (await system_links.get_attribute("class") or "")
         is_top_links_active = "active" in (await top_links.get_attribute("class") or "")
         is_burger_active = "active" in (await burger.get_attribute("class") or "")
