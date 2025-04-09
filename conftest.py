@@ -90,7 +90,7 @@ def pytest_runtest_makereport(item, call):
                 elif "mobile_page" in item.funcargs:  # Асинхронный mobile_page из async_playwright
                     print("Используется асинхронный API для скриншота")
                     loop = asyncio.get_event_loop()
-                    loop.run_until_complete(page.screenshot(path=screenshot_path, full_page=True))
+                    loop.run_until_complete(page.screenshot(path=screenshot_path, full_page=fheadless))
                 print(f"✅ Скриншот сохранен: {screenshot_path}")
                 allure.attach.file(screenshot_path, name=f"{test_name}_{browser_name}",
                                    attachment_type=allure.attachment_type.PNG)

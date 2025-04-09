@@ -1,5 +1,6 @@
 from pages.base_page import BasePage
 from playwright.sync_api import Page as SyncPage
+from utils.constants import DEFAULT_TIMEOUT
 import allure
 
 
@@ -26,7 +27,7 @@ class HomePage(BasePage):
         search_input = self.page.locator(
             "body > main > div.home-search > div > div > div > div > div:nth-child(2) > div > div > form > input[type=text]")
         search_input.fill("ужасы")
-        self.page.wait_for_selector(".ajax-search.active .ajax-search__result ul li a", timeout=10000)
+        self.page.wait_for_selector(".ajax-search.active .ajax-search__result ul li a", timeout=DEFAULT_TIMEOUT)
         self.page.locator(".ajax-search.active .ajax-search__result ul li a >> text=Ужасы").click()
         self.page.wait_for_load_state("domcontentloaded")
 
@@ -55,39 +56,39 @@ class HomePage(BasePage):
         quest_locator = "#filtertab-1 .filter-result .row .col-xl-4.col-lg-4.col-md-4.col-sm-12:nth-child(3)"
         link_locator = f"{quest_locator} a.full-link"
         name_locator = f"{quest_locator} .quest-name > div a"
-        self.page.wait_for_selector(name_locator, state="visible", timeout=10000)
-        self.page.wait_for_selector(link_locator, state="attached", timeout=10000)
+        self.page.wait_for_selector(name_locator, state="visible", timeout=DEFAULT_TIMEOUT)
+        self.page.wait_for_selector(link_locator, state="attached", timeout=DEFAULT_TIMEOUT)
         element_name = self.page.locator(name_locator).inner_text()
         element_link = self.page.locator(link_locator).get_attribute("href")
-        self.page.locator(quest_locator).click(timeout=10000)
+        self.page.locator(quest_locator).click(timeout=DEFAULT_TIMEOUT)
         self.page.wait_for_load_state("networkidle")
         return element_name, element_link
 
     def filter_open_close(self):
-        filter_open = self.page.wait_for_selector("#expand-btn-container", state="visible", timeout=10000)
+        filter_open = self.page.wait_for_selector("#expand-btn-container", state="visible", timeout=DEFAULT_TIMEOUT)
         filter_open.click()
         print("Filter opened")
-        filter_close = self.page.wait_for_selector(".close-filter", state="visible", timeout=10000)
+        filter_close = self.page.wait_for_selector(".close-filter", state="visible", timeout=DEFAULT_TIMEOUT)
         print(f"Close button visible: {filter_close.is_visible()}, enabled: {filter_close.is_enabled()}")
         filter_close.click()
         print("Filter closed")
 
     def filter_select_params(self):
-        self.page.wait_for_selector("#wrap_toggle", state="visible", timeout=10000)
+        self.page.wait_for_selector("#wrap_toggle", state="visible", timeout=DEFAULT_TIMEOUT)
         self.page.locator("#wrap_toggle").click()
-        self.page.wait_for_selector('text="Выберите вид квеста"', state="visible", timeout=10000)
+        self.page.wait_for_selector('text="Выберите вид квеста"', state="visible", timeout=DEFAULT_TIMEOUT)
         self.page.get_by_text("Выберите вид квеста").click()
-        self.page.wait_for_selector('#filter_genres >> text="Ужасы"', state="visible", timeout=10000)
+        self.page.wait_for_selector('#filter_genres >> text="Ужасы"', state="visible", timeout=DEFAULT_TIMEOUT)
         self.page.locator("#filter_genres").get_by_text("Ужасы").click()
-        self.page.wait_for_selector('text="Выберите количество игроков"', state="visible", timeout=10000)
+        self.page.wait_for_selector('text="Выберите количество игроков"', state="visible", timeout=DEFAULT_TIMEOUT)
         self.page.get_by_text("Выберите количество игроков").click()
-        self.page.wait_for_selector('#count_players >> text="2"', state="visible", timeout=10000)
+        self.page.wait_for_selector('#count_players >> text="2"', state="visible", timeout=DEFAULT_TIMEOUT)
         self.page.locator("#count_players").get_by_text("2").click()
-        self.page.wait_for_selector('text="От 7 лет"', state="visible", timeout=10000)
+        self.page.wait_for_selector('text="От 7 лет"', state="visible", timeout=DEFAULT_TIMEOUT)
         self.page.get_by_text("От 7 лет", exact=True).click()
-        self.page.wait_for_selector('text="650-850 грн."', state="visible", timeout=10000)
+        self.page.wait_for_selector('text="650-850 грн."', state="visible", timeout=DEFAULT_TIMEOUT)
         self.page.get_by_text("650-850 грн.").click()
-        self.page.wait_for_selector('button:has-text("Применить")', state="visible", timeout=10000)
+        self.page.wait_for_selector('button:has-text("Применить")', state="visible", timeout=DEFAULT_TIMEOUT)
         self.page.get_by_role("button", name="Применить").click()
         self.page.wait_for_load_state("networkidle", timeout=20000)
         print(f"URL after apply (immediate): {self.page.url}")
